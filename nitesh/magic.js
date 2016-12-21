@@ -5,31 +5,37 @@ function convertToSortedLetters(word){
 }
 
 function replaceQMark(array){  
+    var value = [];
       for(i = 0 ; i < array.length ; i++){
-        if(array[i].charCodeAt() == '?'.charCodeAt()){
-            array[i] = "\\w";           
-        }else{
-              array[i] =  array[i]+"?";
+        if(array[i].charCodeAt() != '?'.charCodeAt()){
+            value.push(array[i]+"?");        
         }
     }
-    return array;
+    return value;
 }
 
 function prepareRegex(letters){
-    letters = replaceQMark(letters);    
-    var regex = "^"+letters.join("")+"$"; 
-    console.log(regex);
+    var len = letters.length;
+    letters = replaceQMark(letters);
+     var regex = "^"+letters.join("")+"$";
+    if(letters.length != len){
+       regex = letters.join("");
+       if(letters.length == 1){
+           regex = regex.replace("?", "");
+       }
+    }   
+  
     return regex;
 }
 
 function magic(letters, word){
+    if (letters.length < word.length){
+        return false;
+    }
     letters = convertToSortedLetters(letters);
     word = convertToSortedLetters(word);    
     regex = prepareRegex(letters);    
     var regObj = new RegExp(regex, 'g');
-    return regObj.test(word.join(""));
+    word = word.join("");
+    return regObj.test(word);
 }
-
-
-
-magic("wh?????", "wheels");
