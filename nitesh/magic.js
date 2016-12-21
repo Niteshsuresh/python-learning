@@ -1,32 +1,33 @@
-function removeQMark(array){  
-    var value = [];
-    for(i = 0 ; i < array.length ; i++){
-        if(array[i].charCodeAt() != '?'.charCodeAt()){
-            value.push(array[i]);           
-        }
-    }
-    return value;
+function convertToSortedLetters(word){
+    var letters = word.split("");
+    return letters.sort();
+    
 }
 
-
-function addQToRegex(qCount){
-    var exp = "[\\w]{1,"+qCount+"}";
-    return exp;
+function replaceQMark(array){  
+      for(i = 0 ; i < array.length ; i++){
+        if(array[i].charCodeAt() == '?'.charCodeAt()){
+            array[i] = "\\w";           
+        }else{
+              array[i] =  array[i]+"?";
+        }
+    }
+    return array;
 }
 
 function prepareRegex(letters){
-    var trimmedLetters = removeQMark(letters);
-    var count = letters.length - trimmedLetters.length;
-    var exp = addQToRegex(count);
-    var regex = "^(["+trimmedLetters.join("")+"])("+exp+")$";
+    letters = replaceQMark(letters);    
+    var regex = "^"+letters.join("")+"$"; 
     console.log(regex);
     return regex;
 }
 
 function magic(letters, word){
-    var regex = prepareRegex(letters);
+    letters = convertToSortedLetters(letters);
+    word = convertToSortedLetters(word);    
+    regex = prepareRegex(letters);    
     var regObj = new RegExp(regex, 'g');
-    return regObj.test(word);
+    return regObj.test(word.join(""));
 }
 
 
